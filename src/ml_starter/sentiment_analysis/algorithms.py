@@ -208,3 +208,24 @@ def pegasos(feature_matrix, labels, T, L):
             eta = 1.0 / np.sqrt(count)
             theta, theta_0 = pegasos_single_step_update(feature_matrix[i], labels[i], L, eta, theta, theta_0)
     return theta, theta_0
+
+
+def classify(feature_matrix, theta, theta_0):
+    """
+    A classification function that uses theta and theta_0 to classify a set of
+    data points.
+
+    Args:
+        feature_matrix - A numpy matrix describing the given data. Each row
+            represents a single data point.
+                theta - A numpy array describing the linear classifier.
+        theta - A numpy array describing the linear classifier.
+        theta_0 - A real valued number representing the offset parameter.
+
+    Returns: A numpy array of 1s and -1s where the kth element of the array is
+    the predicted classification of the kth row of the feature matrix using the
+    given theta and theta_0. If a prediction is GREATER THAN zero, it should
+    be considered a positive classification.
+    """
+    # Your code here
+    raise NotImplementedError

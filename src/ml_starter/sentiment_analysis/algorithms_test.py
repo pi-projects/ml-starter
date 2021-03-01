@@ -44,6 +44,23 @@ def check_tuple(ex_name, f, exp_res, *args, **kwargs):
         return True
 
 
+def check_array(ex_name, f, exp_res, *args):
+    try:
+        res = f(*args)
+    except NotImplementedError:
+        logging.error('%s: not implemented', ex_name)
+        return True
+    if not type(res) == np.ndarray:
+        logging.error('%s: does not return a numpy array, type: ', ex_name, type(res))
+        return True
+    if not len(res) == len(exp_res):
+        logging.error('%s: expected an array of shape %s, but got array of shape %s', ex_name, exp_res.shape, res.shape)
+        return True
+    if not all(equals(x, y) for x, y in zip(res, exp_res)):
+        logging.error('%s: incorrect answer. Expected %s, got %s', ex_name, exp_res, res)
+        return True
+
+
 def check_list(ex_name, f, exp_res, *args):
     try:
         res = f(*args)
@@ -229,6 +246,26 @@ def check_pegasos():
     logging.info('%s: PASS', ex_name)
 
 
+def check_classify():
+    ex_name = "classify"
+
+    feature_matrix = np.array([[1, 1], [1, 1], [1, 1]])
+    theta = np.array([1, 1])
+    theta_0 = 0
+    exp_res = np.array([1, 1, 1])
+    if check_array(ex_name, ai.classify, exp_res, feature_matrix, theta, theta_0):
+        return
+
+    feature_matrix = np.array([[-1, 1]])
+    theta = np.array([1, 1])
+    theta_0 = 0
+    exp_res = np.array([-1])
+    if check_array(ex_name + " (boundary case)", ai.classify, exp_res, feature_matrix, theta, theta_0):
+        return
+
+    logging.info('%s: PASS', ex_name)
+
+
 def main():
     logging.basicConfig(format='%(asctime)s - %(levelname)s - %(module)s - %(message)s', level=logging.DEBUG, )
     logging.info("Import algorithms")
@@ -240,6 +277,7 @@ def main():
     check_average_perceptron()
     check_pegasos_single_update()
     check_pegasos()
+    check_classify()
 
 
 if __name__ == "__main__":
