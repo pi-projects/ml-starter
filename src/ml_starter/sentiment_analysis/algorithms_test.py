@@ -142,6 +142,93 @@ def check_perceptron():
     logging.info('%s: PASS', ex_name)
 
 
+def check_average_perceptron():
+    ex_name = "average_perceptron"
+
+    feature_matrix = np.array([[1, 2]])
+    labels = np.array([1])
+    T = 1
+    exp_res = (np.array([1, 2]), 1)
+    if check_tuple(ex_name, ai.average_perceptron, exp_res, feature_matrix, labels, T):
+        return
+
+    feature_matrix = np.array([[1, 2], [-1, 0]])
+    labels = np.array([1, 1])
+    T = 1
+    exp_res = (np.array([-0.5, 1]), 1.5)
+    if check_tuple(ex_name, ai.average_perceptron, exp_res, feature_matrix, labels, T):
+        return
+
+    feature_matrix = np.array([[1, 2]])
+    labels = np.array([1])
+    T = 2
+    exp_res = (np.array([1, 2]), 1)
+    if check_tuple(ex_name, ai.average_perceptron, exp_res, feature_matrix, labels, T):
+        return
+
+    feature_matrix = np.array([[1, 2], [-1, 0]])
+    labels = np.array([1, 1])
+    T = 2
+    exp_res = (np.array([-0.25, 1.5]), 1.75)
+    if check_tuple(ex_name, ai.average_perceptron, exp_res, feature_matrix, labels, T):
+        return
+
+    logging.info('%s: PASS', ex_name)
+
+
+def check_pegasos_single_update():
+    ex_name = "pegasos_single_update"
+
+    feature_vector = np.array([1, 2])
+    label, theta, theta_0 = 1, np.array([-1, 1]), -1.5
+    L = 0.2
+    eta = 0.1
+    exp_res = (np.array([-0.88, 1.18]), -1.4)
+    if check_tuple(ex_name, ai.pegasos_single_step_update, exp_res, feature_vector, label, L, eta, theta, theta_0):
+        return
+
+    feature_vector = np.array([1, 1])
+    label, theta, theta_0 = 1, np.array([-1, 1]), 1
+    L = 0.2
+    eta = 0.1
+    exp_res = (np.array([-0.88, 1.08]), 1.1)
+    if check_tuple(ex_name + " (boundary case)", ai.pegasos_single_step_update, exp_res, feature_vector, label, L, eta,
+                   theta, theta_0):
+        return
+
+    feature_vector = np.array([1, 2])
+    label, theta, theta_0 = 1, np.array([-1, 1]), -2
+    L = 0.2
+    eta = 0.1
+    exp_res = (np.array([-0.88, 1.18]), -1.9)
+    if check_tuple(ex_name, ai.pegasos_single_step_update, exp_res, feature_vector, label, L, eta, theta, theta_0):
+        return
+
+    logging.info('%s: PASS', ex_name)
+
+
+def check_pegasos():
+    ex_name = "pegasos"
+
+    feature_matrix = np.array([[1, 2]])
+    labels = np.array([1])
+    T = 1
+    L = 0.2
+    exp_res = (np.array([1, 2]), 1)
+    if check_tuple(ex_name, ai.pegasos, exp_res, feature_matrix, labels, T, L):
+        return
+
+    feature_matrix = np.array([[1, 1], [1, 1]])
+    labels = np.array([1, 1])
+    T = 1
+    L = 1
+    exp_res = (np.array([1 - 1 / np.sqrt(2), 1 - 1 / np.sqrt(2)]), 1)
+    if check_tuple(ex_name, ai.pegasos, exp_res, feature_matrix, labels, T, L):
+        return
+
+    logging.info('%s: PASS', ex_name)
+
+
 def main():
     logging.basicConfig(format='%(asctime)s - %(levelname)s - %(module)s - %(message)s', level=logging.DEBUG, )
     logging.info("Import algorithms")
@@ -150,6 +237,9 @@ def main():
     check_hinge_loss_full()
     check_perceptron_single_step_update()
     check_perceptron()
+    check_average_perceptron()
+    check_pegasos_single_update()
+    check_pegasos()
 
 
 if __name__ == "__main__":
