@@ -223,5 +223,61 @@ def classify(feature_matrix, theta, theta_0):
     given theta and theta_0. If a prediction is GREATER THAN zero, it should
     be considered a positive classification.
     """
-    # Your code here
-    raise NotImplementedError
+    samples, features = feature_matrix.shape
+    predictions = np.zeros(samples)
+    for i in range(samples):
+        feature_vector = feature_matrix[i]
+        prediction = np.dot(theta, feature_vector) + theta_0
+        if prediction > 0:
+            predictions[i] = 1
+        else:
+            predictions[i] = -1
+    return predictions
+
+
+def accuracy(predictions, targets):
+    """
+    Given length-N vectors containing predicted and target labels,
+    returns the percentage and number of correct predictions.
+    """
+    return (predictions == targets).mean()
+
+
+def classifier_accuracy(
+        classifier,
+        train_feature_matrix,
+        val_feature_matrix,
+        train_labels,
+        val_labels,
+        **kwargs):
+    """
+    Trains a linear classifier and computes accuracy.
+    The classifier is trained on the train data. The classifier's
+    accuracy on the train and validation data is then returned.
+
+    Args:
+        classifier - A classifier function that takes arguments
+            (feature matrix, labels, **kwargs) and returns (theta, theta_0)
+        train_feature_matrix - A numpy matrix describing the training
+            data. Each row represents a single data point.
+        val_feature_matrix - A numpy matrix describing the validation
+            data. Each row represents a single data point.
+        train_labels - A numpy array where the kth element of the array
+            is the correct classification of the kth row of the training
+            feature matrix.
+        val_labels - A numpy array where the kth element of the array
+            is the correct classification of the kth row of the validation
+            feature matrix.
+        **kwargs - Additional named arguments to pass to the classifier
+            (e.g. T or L)
+
+    Returns: A tuple in which the first element is the (scalar) accuracy of the
+    trained classifier on the training data and the second element is the
+    accuracy of the trained classifier on the validation data.
+    """
+    theta, theta_0 = classifier(train_feature_matrix, train_labels, **kwargs)
+    train_predictions = classify(train_feature_matrix, theta, theta_0)
+    val_predictions = classify(val_feature_matrix, theta, theta_0)
+    train_accuracy = accuracy(train_predictions, train_labels)
+    validation_accuracy = accuracy(val_predictions, val_labels)
+    return train_accuracy, validation_accuracy

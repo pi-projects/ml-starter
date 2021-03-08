@@ -266,6 +266,43 @@ def check_classify():
     logging.info('%s: PASS', ex_name)
 
 
+def check_classifier_accuracy():
+    ex_name = "classifier_accuracy"
+
+    train_feature_matrix = np.array([[1, 0], [1, -1], [2, 3]])
+    val_feature_matrix = np.array([[1, 1], [2, -1]])
+    train_labels = np.array([1, -1, 1])
+    val_labels = np.array([-1, 1])
+    exp_res = 1, 0
+    T = 1
+    if check_tuple(
+            ex_name, ai.classifier_accuracy,
+            exp_res,
+            ai.perceptron,
+            train_feature_matrix, val_feature_matrix,
+            train_labels, val_labels,
+            T=T):
+        return
+
+    train_feature_matrix = np.array([[1, 0], [1, -1], [2, 3]])
+    val_feature_matrix = np.array([[1, 1], [2, -1]])
+    train_labels = np.array([1, -1, 1])
+    val_labels = np.array([-1, 1])
+    exp_res = 1, 0
+    T = 1
+    L = 0.2
+    if check_tuple(
+            ex_name, ai.classifier_accuracy,
+            exp_res,
+            ai.pegasos,
+            train_feature_matrix, val_feature_matrix,
+            train_labels, val_labels,
+            T=T, L=L):
+        return
+
+    logging.info('%s: PASS', ex_name)
+
+
 def main():
     logging.basicConfig(format='%(asctime)s - %(levelname)s - %(module)s - %(message)s', level=logging.DEBUG, )
     logging.info("Import algorithms")
@@ -278,6 +315,7 @@ def main():
     check_pegasos_single_update()
     check_pegasos()
     check_classify()
+    check_classifier_accuracy()
 
 
 if __name__ == "__main__":
